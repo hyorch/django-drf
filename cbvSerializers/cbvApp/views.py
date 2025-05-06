@@ -5,6 +5,67 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import Http404
+from rest_framework import generics, mixins
+from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+ 
+
+class StudentPagination(PageNumberPagination):
+    page_size = 4
+    
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    pagination_class = StudentPagination
+    #pagination_class = LimitOffsetPagination
+
+
+""" 
+class StudentList(generics.ListCreateAPIView):  
+    queryset = Student.objects.all()  # fixed name to be used by mixing methods
+    serializer_class = StudentSerializer
+
+
+class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+""" 
+
+""" 
+
+class StudentList(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
+    queryset = Student.objects.all()  # fixed name to be used by mixing methods
+    serializer_class = StudentSerializer
+
+    def get(self, request):
+        return self.list(request)
+
+    def post(self, request):
+        return self.create(request)
+    
+    
+class StudentDetail(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+    def get(self, request,pk):
+        return self.retrieve(request,pk)
+
+    def put(self, request,pk ):
+        return self.update(request,pk)
+
+    def delete(self, request,pk):
+        return self.destroy(request,pk)
+
+
+""" 
+
+
+
+""" 
 
 class StudentList(APIView):
 
@@ -22,30 +83,29 @@ class StudentList(APIView):
     
 
 class StudentDetail(APIView):
-    def get_object(self, id):
+    def get_object(self, pk):
         try:
-            return Student.objects.get(id=id)
+            return Student.objects.get(pk=pk)
         except Student.DoesNotExist:
             raise Http404
         
-    def get(self, request, id):
-        student = self.get_object(id)        
+    def get(self, request, pk):
+        student = self.get_object(pk)        
         serializer = StudentSerializer(student)
         return Response(serializer.data)
     
-    def put(self, request, id):
-        student = self.get_object(id)        
+    def put(self, request, pk):
+        student = self.get_object(pk)        
         serializer = StudentSerializer(student, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
    
-    def delete(self, request, id):  
-        student = self.get_object(id)        
+    def delete(self, request, pk):  
+        student = self.get_object(pk)        
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-        
+"""

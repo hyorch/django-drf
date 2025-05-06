@@ -1,5 +1,5 @@
 """
-URL configuration for cbvSerializers project.
+URL configuration for academy project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -14,13 +14,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
-from cbvApp import views
+from django.contrib import admin
+from django.urls import path, include
 
+from courses import views
 
+from rest_framework.routers import DefaultRouter
 
-
+router = DefaultRouter()
+router.register('courses', views.CourseViewSet, basename='course')
 urlpatterns = [
-    path('', views.StudentList.as_view(), name='student-list'),
-    path('<int:pk>/', views.StudentDetail.as_view(), name='student-detail'),
+    path('', include(router.urls)),
 ]
+
+"""
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('courses/', views.CourseList.as_view(), name='course-list'),
+    path('courses/<int:pk>/', views.CourseDetail.as_view(), name='course-detail'),
+]
+"""
