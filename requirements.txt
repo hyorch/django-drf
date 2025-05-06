@@ -1,7 +1,4 @@
 django==5.2
 djangorestframework==3.16.0
 psycopg[binary] 
-
-
-# For testing
-pytest 
+django-filter==25.1
