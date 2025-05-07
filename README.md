@@ -18,8 +18,9 @@ Visual Code Studio Extensions
 1. Create a Project. Create an App
 2. Create the model
 3. Configure the Serializer
-4. Create Function Based view/endpoints, Class Based view/endpoints
+4. Create Function / Class Based view/endpoints
 5. Configure URL
+6. Run db migrations.
 
 
 ```bash
@@ -56,3 +57,16 @@ Add users
 ```sql
 insert into public."firstApp_employee" values (2,'Pepe',4000.000)
 ``` 
+
+
+## PostgreSQL
+
+```sql
+CREATE USER username WITH PASSWORD 'password'; 
+CREATE DATABASE dbname OWNER username;
+
+dbrest=# create user flight_usr with password 'vuelavuelavuela';
+CREATE ROLE
+dbrest=# CREATE DATABASE flightdb OWNER flight_usr;
+CREATE DATABASE
+```
