@@ -10,17 +10,17 @@ phases:
   pre_build:
     commands:
       - echo "Running migrations"
-      - python manage.py migrate
+      - python ./flightServices/manage.py migrate
   build:
     commands:
       - echo "Collecting static files"
-      - python manage.py collectstatic --noinput
+      - python ./flightServices/manage.py collectstatic --noinput
   post_build:
     commands:
       - echo "Build completed successfully"
 artifacts:
   files:
-    - '**/*'
+    - './flightServices/**/*'
   base-directory: flightServices
 
    
